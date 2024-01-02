@@ -1,46 +1,108 @@
-# Getting Started with Create React App
+# Ressource
+https://www.youtube.com/watch?v=TPACABQTHvM&list=PLc-glsRnopxSAhNt24V4ch19LUqmNhMAm&index=36&t=3s
+(min 21:41)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Install cmd
+npx create-react-app my-app --template typescript
 
-## Available Scripts
+####
 
-In the project directory, you can run:
+# Notes
+1. Type of a function return is not nessesary
 
-### `npm start`
+2. Propos Type
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+    import React from 'react';
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+    // Define the type for your props, We use `interface` because: 
+    // `Code Organization`, `Reusability`, `Readability`, `Extensibility(Easy to add more props)`, `Easy for TS to check the type` 
+    interface MyComponentProps {
+        name: string;
+        age: number;
+        isStudent: boolean;
+    }
 
-### `npm test`
+    // Create your functional component and specify the type for the props
+    const MyComponent: React.FC<MyComponentProps> = ({ name, age, isStudent }): JSX.Element => {
+    return (
+        <div>
+        <h1>Hello, {name}!</h1>
+        <p>Age: {age}</p>
+        <p>{isStudent ? 'Student' : 'Not a student'}</p>
+        </div>
+    );
+    };
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    export default MyComponent;
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Type of a component `const MyComponent: React.FC` 
+    import React from 'react';
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    const MyComponent: React.FC = (): JSX.Element => {
+        return <div>This component doesn't take any props!</div>;
+    };
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+4. Children has the type => `children: React.ReactNode`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+5. JSX Type: `const title: JSX.Element = <h2>I'm a JSX element</h2>;`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+6. Type of a button: `type: "submit" | "reset" | "button"`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+7. Extends: 
+    `Type` we use `&`:
+        type TColor = {
+            color: "Green" | "Black" | "Blue" | "Yellow" | "Gris";
+        };
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+        type TDiv = TColor & {
+            size: number;
+        };
 
-## Learn More
+    `Interface` we use `extends`:
+        interface IColor {
+            color: "Green" | "Black" | "Blue" | "Yellow" | "Gris";
+        };
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+        interface IDiv extends TColor {
+            size: number;
+        };
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+8. useState type: 
+    8.1 `const [count, setCount] = useState<number>(0);`
+    "Not neccessary to type the useState"
+
+    8.2 Type useState that hold an object
+        interface IUser {
+            name: string;
+            age: number;
+            country: string;
+        }
+
+        const [user, setUser] = useState<IUser | null>(null); // Null in the case not fetching data yet
+
+        const name = user?.name // `?` because it could be empty
+        const name = user!.name // `!` You teel to TS, yes it can be empty but in this case i'm sure it will have value
+
+
+9. Generic types:
+    const fun = <T,>(value: T): T => {
+        return value;
+    }
+
+    const resultString: string = fun("Hello, TypeScript!"); // T is inferred as string
+    const resultNumber: number = fun(42); // T is inferred as number
+
+It provides flexibility because you can use the same function with different types without explicitly specifying the type each time.
+
+This kind of generic typing is especially useful when you want to write functions or components that work with various data types while maintaining type safety.
+
+10. `Array` Type: `numbers: number[];`
+
+11. To create a reusibale types, we create a `folder "lib"` => a `file "types.ts"` => and use `export/import` 
+`import { type Color } from "./lib/types";` // type just to clarify it's a TS type
+
+12. the `@` symbol is often configured as an alias for the project's `src` directory. you can config this in your `webpack` or `tsconfig.json`
+
+Array, enum
